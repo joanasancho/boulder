@@ -106,7 +106,11 @@ type verificationRequestEvent struct {
 // net/http, except we only send A queries and accept IPv4 addresses.
 // TODO(#593): Add IPv6 support
 func (va ValidationAuthorityImpl) getAddr(ctx context.Context, hostname string) (net.IP, []net.IP, *probs.ProblemDetails) {
-	addrs, err := va.dnsResolver.LookupHost(ctx, hostname)
+	//addrs, err := va.dnsResolver.LookupHost(ctx, hostname)
+	addrs1, err := net.LookupHost(hostname)
+	addrs, err := net.LookupIP(addrs1[0])
+	
+	
 	if err != nil {
 		va.log.Debug(fmt.Sprintf("%s DNS failure: %s", hostname, err))
 		problem := bdns.ProblemDetailsFromDNSError(err)
@@ -566,7 +570,7 @@ func (va *ValidationAuthorityImpl) PerformValidation(ctx context.Context, domain
 		RequestTime: va.clk.Now(),
 	}
 	vStart := va.clk.Now()
-
+	
 	records, prob := va.validateChallengeAndCAA(ctx, core.AcmeIdentifier{Type: "dns", Value: domain}, challenge)
 
 	logEvent.ValidationRecords = records

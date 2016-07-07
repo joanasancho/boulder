@@ -11,7 +11,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/weppos/publicsuffix-go/publicsuffix"
+//	"github.com/weppos/publicsuffix-go/publicsuffix"
 
 	"github.com/letsencrypt/boulder/core"
 	blog "github.com/letsencrypt/boulder/log"
@@ -295,13 +295,14 @@ func extractDomainIANASuffix(name string) (string, error) {
 	if name == "" {
 		return "", fmt.Errorf("Blank name argument passed to ExtractDomainIANASuffix")
 	}
-
+/*
 	rule := publicsuffix.DefaultList.Find(name, &publicsuffix.FindOptions{IgnorePrivate: true, DefaultRule: nil})
 	if rule == nil {
 		return "", fmt.Errorf("Domain %s has no IANA TLD", name)
 	}
-
-	suffix := rule.Decompose(name)[1]
+*/
+	parts := strings.SplitAfter(name, ".")
+	suffix := parts[len(parts)-1]
 
 	// If the TLD is empty, it means name is actually a suffix.
 	// In fact, decompose returns an array of empty strings in this case.
