@@ -8,5 +8,12 @@ $ git remote add fork git@github.com:joanasancho/boulder.git
 $ git pull fork master
 
 $ docker-compose up
+```
+
+
+```
+$ docker build -t certbot-test ./certbot-test
+
+$ docker run -it -p 5001:5001 -p 5002:5002 --net host certbot-test certonly -a standalone -d <your_local_domain_name> --server http://<your_boulder_hostst>:4000/directory    
 
 ```
